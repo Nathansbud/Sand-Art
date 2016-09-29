@@ -36,7 +36,6 @@ void draw()
     {
       sand.clear();
     }
-    CollisionChecks();
   }
   for (int i = 0; i < 7; i++)
   {
@@ -47,6 +46,7 @@ void draw()
       colorSelector[i].SetPosition();
     }
   }
+  CollisionChecks();
 }
 
 void CollisionChecks()
@@ -62,15 +62,7 @@ void CollisionChecks()
       }
       if (dist <= 1)
       {
-        antigravity = true;
-        if (antigravity == true)
-        {
-          sand.get(i)._sandPosY += -1;
-        }
-      }
-      if (dist > 1)
-      {
-        antigravity=false;
+        sand.get(i)._sandFallSpeed = 0;
       }
     }
   }
