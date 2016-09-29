@@ -26,11 +26,15 @@ void draw()
     if (mousePressed)
     {
       sand.add(new Sand());
-      noCursor(); 
-    }
-    for (Sand s : sand)
+      noCursor();
+    }   
+    for (Sand sand : sand)
     {
-      s.Falling();
+      sand.Falling();
+    }
+    if (keyPressed && key == BACKSPACE)
+    {
+      sand.clear();
     }
     CollisionChecks();
   }
@@ -68,15 +72,11 @@ void CollisionChecks()
       {
         antigravity=false;
       }
-      //if(sand.get(i)._sandPosY < 80)
-      //{
-      // sand.remove(i); 
-      //}
     }
   }
 }
 
 void mouseReleased()
 {
- cursor();
+  cursor();
 }
