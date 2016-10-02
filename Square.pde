@@ -1,6 +1,6 @@
 class Square
 {
-  private int _squarePosX, _squarePosY, _squareWidth, _squareHeight;
+  private float _squarePosX, _squarePosY, _squareWidth, _squareHeight;
   private color _col;
   Square(int squarePosX)
   {

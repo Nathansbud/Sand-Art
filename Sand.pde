@@ -1,41 +1,29 @@
 class Sand
 {
-  private int _sandPosX, _sandPosY;
-  private float _rad;
-  private float _sandFallSpeed;
-  private color _color;
-  private boolean colorChange[] = new boolean[7];
+  PVector sandPosition, gravity;
+  //int _sandPosX, _sandPosY;
+  float _rad, _sandFallSpeed;
+  color _color;
+  boolean colorChange[] = new boolean[7];
 
   Sand()
   {
-    _sandFallSpeed = 3;
-    _sandPosX = mouseX + (int)random(-7, 7);
-    _sandPosY = mouseY; //+ 5 +(int)random(2, 6);
+    sandPosition = new PVector(mouseX + (int)random(-7, 7), mouseY);
+    gravity = new PVector(0, 3);
+    //_sandFallSpeed = 3;
+    //_sandPosX = mouseX + (int)random(-7, 7);
+    //_sandPosY = mouseY; //+ 5 +(int)random(2, 6);
     _rad = 4;
   }
 
-  void Falling()
+  void Falling(color _color)
   {
     fill(_color);
-    ellipse(_sandPosX, _sandPosY, _rad, _rad);
-    _sandPosY += _sandFallSpeed;
-    if (_sandPosY >= height - 2)
+    ellipse(sandPosition.x, sandPosition.y, _rad, _rad);
+    sandPosition.add(gravity);
+    if (sandPosition.y >= height - 2)
     {
-      _sandFallSpeed = 0;
+      gravity.y = 0;
     } 
-    for (int i = 0; i < 7; i++)
-    {
-      if (mousePressed)
-      {
-        if (mouseX >= 100 * i + 30 && mouseX <= 100 * i + 80 && mouseY >= 30 && mouseY <= 80)
-        {
-          colorChange[i] = true;
-        }
-      }
-      if (colorChange[i] == true)
-      {
-        _color = color(colors[i]);
-      }
-    }
   }
 }
