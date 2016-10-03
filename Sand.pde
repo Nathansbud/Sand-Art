@@ -12,6 +12,12 @@ class Sand
     colour = _color;
   }
 
+  //void Update()
+  //{
+  //  Falling();
+  //  Settings();
+  //}
+
   void Falling()
   {
     fill(colour);
@@ -22,4 +28,12 @@ class Sand
       gravity.y = 0;
     }
   }
+  
+  //void Settings()
+  //{
+  // if(sandSize[0] == true)
+  // {
+  //  _rad = 18; 
+  // }
+  //}
 }
