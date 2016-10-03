@@ -1,29 +1,25 @@
 class Sand
 {
-  PVector sandPosition, gravity;
-  //int _sandPosX, _sandPosY;
-  float _rad, _sandFallSpeed;
-  color _color;
-  boolean colorChange[] = new boolean[7];
+  PVector sandPosition, gravity; //Vectors for sand position and fall speed
+  float _rad; //Radius
+  color colour;
 
-  Sand()
+  Sand(color _color) //Color is defined in constructor 
   {
     sandPosition = new PVector(mouseX + (int)random(-7, 7), mouseY);
     gravity = new PVector(0, 3);
-    //_sandFallSpeed = 3;
-    //_sandPosX = mouseX + (int)random(-7, 7);
-    //_sandPosY = mouseY; //+ 5 +(int)random(2, 6);
-    _rad = 4;
+    _rad = 2;
+    colour = _color;
   }
 
-  void Falling(color _color)
+  void Falling()
   {
-    fill(_color);
-    ellipse(sandPosition.x, sandPosition.y, _rad, _rad);
-    sandPosition.add(gravity);
-    if (sandPosition.y >= height - 2)
+    fill(colour);
+    ellipse(sandPosition.x, sandPosition.y, _rad, _rad); //Draws ellipse at sandPosition.x & y
+    sandPosition.add(gravity); //Vector sandPosition is increased by gravity
+    if (sandPosition.y >= height - 2) //If sand reaches bottom, sandPosition.y no longer is increased
     {
       gravity.y = 0;
-    } 
+    }
   }
 }
