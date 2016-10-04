@@ -12,28 +12,62 @@ class Sand
     colour = _color;
   }
 
-  //void Update()
-  //{
-  //  Falling();
-  //  Settings();
-  //}
-
   void Falling()
   {
     fill(colour);
     ellipse(sandPosition.x, sandPosition.y, _rad, _rad); //Draws ellipse at sandPosition.x & y
     sandPosition.add(gravity); //Vector sandPosition is increased by gravity
-    if (sandPosition.y >= height - 2) //If sand reaches bottom, sandPosition.y no longer is increased
+    if (sandSpeed[0] == true)
+    {
+      gravity.y = 0;
+    }
+    if (sandSpeed[1] == true)
+    {
+      gravity.y = 1;
+    }
+    if (sandSpeed[2] == true)
+    {
+      gravity.y = 3;
+    }
+    if (sandSpeed[3] == true)
+    {
+      gravity.y = 6;
+    }
+    if (sandSize[0] == true)
+    {
+      _rad = 1;
+    }
+    if (sandSize[1] == true)
+    {
+      _rad = 2;
+    }
+    if (sandSize[2] == true)
+    {
+      _rad = 4;
+    }
+    if (sandSize[3] == true)
+    {
+      _rad = 8;
+    }
+    if (windSpeed[0] == true)
+    {
+      _rad = 1;
+    }
+    if (sandSize[1] == true)
+    {
+      _rad = 2;
+    }
+    if (sandSize[2] == true)
+    {
+      _rad = 4;
+    }
+    if (sandSize[3] == true)
+    {
+      _rad = 8;
+    }
+    if (sandPosition.y >= height - _rad)
     {
       gravity.y = 0;
     }
   }
-  
-  //void Settings()
-  //{
-  // if(sandSize[0] == true)
-  // {
-  //  _rad = 18; 
-  // }
-  //}
 }

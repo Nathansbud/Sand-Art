@@ -7,7 +7,7 @@ import ddf.minim.ugens.*;
 Minim minim; //Just your standard minim fare
 AudioPlayer[] Song = new AudioPlayer[9]; //Array of song for music player
 ArrayList<Sand> sand = new ArrayList<Sand>(); //ArrayList of Sand objects 
-boolean gravity, sandSize[]; //Variable used to signal sand creation and drawing
+boolean gravity, sandSize[], sandSpeed[], windSpeed[]; //Variable used to signal sand creation and drawing
 Square colorSelector[] = new Square[7]; //Squares for color selector
 color colors[] = {color(255, 0, 0), color(255, 127, 0), color(255, 255, 0), color(0, 255, 0), 
   color(0, 0, 255), color(75, 0, 130), color(148, 0, 211), color(0)}; //Array of colors used (will be changed once color wheel is implemented)
@@ -34,7 +34,9 @@ void setup()
   num = (int)random(0, 9); //Randomizes int num such that the MP3 chosen is random
   c = 7; //c = black at first
   screen = 0.1;
-  sandSize = new boolean[3];
+  sandSize = new boolean[4];
+  sandSpeed = new boolean[4];
+  windSpeed = new boolean[4];
 }
 
 void draw()
@@ -46,6 +48,7 @@ void draw()
     fill(255);
     rect(width/8, height/8, width - width/8 * 2, height - height/8 * 2);
     rect(width/2 - width/36, height - height/6, width/24, height/48, 8);
+    rect(width/2 + width/4, height/2, width/16, height/48, 8);
     fill(0);
     textSize(50);
     text("Settings", width/2 - width/12, height/10);
@@ -57,11 +60,11 @@ void draw()
         rect(i * width/14.4 + width/2.75, j * height/4, width/24, height/48, 8);
         fill(0);
         textSize(25);
-
         if (i == 3)
         {
           text(headerText[i], width/2 - width/16, height/5 * i);
-        } else
+        } 
+        else
         {
           text(headerText[i], width/2 - width/24, height/5 * i);
         }
@@ -69,14 +72,17 @@ void draw()
         if (j == 2)
         {
           text(sizeText[i], i * width/14.4 + width/144 + width/2.75, j * height/4 + height/60);
-        } else
+        } 
+        else
         {
           text(buttonText[i], i * width/14.4 + width/144 + width/2.75, j * height/4 + height/60);
         }
       }
     }
     text("Back", width/2 - width/53, height - height/6 + height/60);
-  } else
+    text("Reset", width/1.3031674208, height/2 + height/60);
+  } 
+  else
   {
     background(175);
     textSize(50);
@@ -123,14 +129,17 @@ void CollisionChecks()
   {
     for (int j = 0; j < sand.size(); j++)
     {
-      float dist = dist(sand.get(i).sandPosition.x, sand.get(i).sandPosition.y, sand.get(j).sandPosition.x, sand.get(j).sandPosition.y); //Checks collision between any 2 particles
-      if (i == j) //If i == j, ignore—they're the same particle
+      for (int k = 0; k < 4; k++)
       {
-        continue;
-      } 
-      if (dist <= sand.get(i)._rad/2) //If distance between 2 particles = 1/2 of radius, then fall speed = 0
-      {
-        sand.get(i).gravity.y = 0;
+        float dist = dist(sand.get(i).sandPosition.x, sand.get(i).sandPosition.y, sand.get(j).sandPosition.x, sand.get(j).sandPosition.y); //Checks collision between any 2 particles
+        if (i == j) //If i == j, ignore—they're the same particle
+        {
+          continue;
+        } 
+        if (dist <= sand.get(i)._rad/2)//If distance between 2 particles = 1/2 of radius, then fall speed = 0
+        {
+          sand.get(i).gravity.y = 0;
+        }
       }
     }
   }
@@ -153,61 +162,111 @@ void mouseClicked()
     noStroke();
     screen = 0.1;
   }
-  //if (screen == 0.2)
-  //{
-  //  if (mouseY >= height/4 && mouseY <= height/4 + height/48)
-  //  {
-  //    if (mouseX >= width/4 && mouseY <= height/4 + height/48)
-  //    {
-  //      sandSize[0] = true;
-  //    }
-  //    if (mouseY >= height/2 && mouseY <= height/2 + height/48)
-  //    {
-  //      sandSize[1] = true;
-  //    }
-  //    if(mouseY >= height/3*4 && mouseY <= height/3*4 + height/48)
-  //    {
-  //     sandSize[2] = true; 
-  //    }
-      
-  //  }
-  //}
 
-  //for (int i = 0; i < 4; i++)
-  //{ 
-  //  for (int j = 1; j < 4; j++)
-  //  {      
-  //    fill(255);
-  //    rect(i * width/14.4 + width/2.75, j * height/4, width/24, height/48, 8);
-  //    fill(0);
-  //    textSize(25);
+  if (screen == 0.2)
+  {
+    if (mouseX >= width/2 + width/4 && mouseX <= width/2 + width/4 + width/16 && mouseY >= height/2 && mouseY <= height/2 + height/48) 
+    { //If Reset Button Pressed
+      sandSpeed[2] = true;
+      sandSpeed[0] = false; 
+      sandSpeed[1] = false; 
+      sandSpeed[3] = false;
+      sandSize[1] = true;
+      sandSize[0] = false; 
+      sandSize[2] = false; 
+      sandSize[3] = false;
+    }   
+    if (mouseY >= height/4 && mouseY <= height/4 + height/48)
+    {
+      if (mouseX >= width/2.75 && mouseX <=  width/2.75 + width/24)
+      {
+        sandSpeed[0] = true; 
+        sandSpeed[1] = false; 
+        sandSpeed[2] = false; 
+        sandSpeed[3] = false;
+      }
+      if (mouseX >= width/14.4 + width/2.75 && mouseX <= width/14.4 + width/2.75 + width/24)
+      {
+        sandSpeed[1] = true; 
+        sandSpeed[0] = false; 
+        sandSpeed[2] = false; 
+        sandSpeed[3] = false;
+      }
+      if (mouseX >= width/7.2 + width/2.75 && mouseX <= width/7.2 + width/2.75 + width/24)
+      {
+        sandSpeed[2] = true; 
+        sandSpeed[1] = false; 
+        sandSpeed[0] = false; 
+        sandSpeed[3] = false;
+      }
+      if (mouseX >= width/4.8 + width/2.75 && mouseX <= width/4.8 + width/2.75 + width/24)
+      {
+        sandSpeed[3] = true; 
+        sandSpeed[2] = false; 
+        sandSpeed[0] = false; 
+        sandSpeed[1] = false;
+      }
+    }
+    if (mouseY >= height/2 && mouseY <= height/2 + height/48)
+    {
+      if (mouseX >= width/2.75 && mouseX <=  width/2.75 + width/24)
+      {
+        sandSize[0] = true; 
+        sandSize[1] = false; 
+        sandSize[2] = false; 
+        sandSize[3] = false;
+      }
+      if (mouseX >= width/14.4 + width/2.75 && mouseX <= width/14.4 + width/2.75 + width/24)
+      {
+        sandSize[1] = true;
+        sandSize[0] = false; 
+        sandSize[2] = false; 
+        sandSize[3] = false;
+      }
+      if (mouseX >= width/7.2 + width/2.75 && mouseX <= width/7.2 + width/2.75 + width/24)
+      {
+        sandSize[2] = true;
+        sandSize[1] = false; 
+        sandSize[0] = false; 
+        sandSize[3] = false;
+      }
+      if (mouseX >= width/4.8 + width/2.75 && mouseX <= width/4.8 + width/2.75 + width/24)
+      {
+        sandSize[3] = true;
+        sandSize[1] = false; 
+        sandSize[2] = false; 
+        sandSize[0] = false;
+      }
 
-  //    if (i == 3)
-  //    {
-  //      text(headerText[i], width/2 - width/16, height/5 * i);
-  //    } else
-  //    {
-  //      text(headerText[i], width/2 - width/24, height/5 * i);
-  //    }
-  //    textSize(15);
-  //    if (j == 2)
-  //    {
-  //      text(sizeText[i], i * width/14.4 + width/144 + width/2.75, j * height/4 + height/60);
-  //    } else
-  //    {
-  //      text(buttonText[i], i * width/14.4 + width/144 + width/2.75, j * height/4 + height/60);
-  //    }
-  //  }
-  //}
-}
+      //if (mouseY >= height/3*4 && mouseY <= height/3*4 + height/48)
+      //{
+      //  if (mouseX >= width/2.75 && mouseX <=  width/2.75 + width/24)
+      //  {
+      //    windSpeed[0] = true;
+      //  }
+      //  if (mouseX >= width/14.4 + width/2.75 && mouseX <= width/14.4 + width/2.75 + width/24)
+      //  {
+      //    windSpeed[1] = true;
+      //  }
+      //  if (mouseX >= width/7.2 + width/2.75 && mouseX <= width/7.2 + width/2.75 + width/24)
+      //  {
+      //    windSpeed[2] = true;
+      //  }
+      //  if (mouseX >= width/4.8 + width/2.75 && mouseX <= width/4.8 + width/2.75 + width/24)
+      //  {
+      //    windSpeed[3] = true;
+      //  }
+      //}
+    }
+  }
 }
 
 void keyPressed()
 {
   if (key == BACKSPACE || key == 'r') //If delete/r pressed, clear all and set color back to black
   {
-    sand.clear();
-    c = 7;
+    sand.clear(); 
+    c = 7; 
     screen = 0.1;
   }
   if (key == '2')
@@ -220,15 +279,15 @@ void MusicPlayer(float posX, float posY, float rad) //Shapes used in making the 
 {
   for (int i = 0; i < 3; i++)
   {
-    fill(0);
-    ellipse(posX + i * 100, posY, rad, rad);    
-    fill(255);
+    fill(0); 
+    ellipse(posX + i * 100, posY, rad, rad); 
+    fill(255); 
     if (i > 0)
     {
       rect(posX + 65 + 20 * i, 40, 10, 30);
     }
-    triangle(970, 45, 970, 65, 982, 55);
-    triangle(982, 45, 982, 65, 994, 55);
+    triangle(970, 45, 970, 65, 982, 55); 
+    triangle(982, 45, 982, 65, 994, 55); 
     triangle(770, 40, 770, 70, 800, 55);
   }
   if (mousePressed)
@@ -243,9 +302,9 @@ void MusicPlayer(float posX, float posY, float rad) //Shapes used in making the 
     }
     if (mouseX > posX + 175 && mouseX < posX + 225 && mouseY > posY - 25 && mouseY < posY + 25) //Next Button Collision
     { 
-      Song[num].rewind();
-      Song[num].pause();
-      num =(int)random(0, 9);
+      Song[num].rewind(); 
+      Song[num].pause(); 
+      num =(int)random(0, 9); 
       Song[num].play();
     }
   }
